@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Summarization App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .progress-container {
+            width: 100%;
+            height: 30px;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            display: none;
+        }
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 5px;
+        }
+        .summary-container {
+            margin-top: 20px;
+        }
+        .summary-box {
+            margin-bottom: 15px;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Arabic Text Summarization</h1>
+    <img src="https://portail.fsr.ac.ma/assets/images/logo_fsr.png" alt="Logo" class="logo">
+
+    <form id="summarization-form">
+        <label for="sample_select">Choose a test article:</label>
+        <select id="sample_select">
+            <option value="">-- Choose Example --</option>
+        </select><br><br>
+
+        <label for="article_text">Or enter article text manually:</label><br>
+        <textarea id="article_text" name="article_text" rows="8" cols="50"></textarea><br><br>
+
+        <button type="submit">Generate Summary</button>
+    </form>
+
+    <div class="progress-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="summary-container">
+        <div class="summary-box">
+            <h2>Original Summary:</h2>
+            <p id="original-summary"></p>
+        </div>
+        <div class="summary-box">
+            <h2>Generated Summary (AraBART):</h2>
+            <p id="arabart-summary"></p>
+        </div>
+    </div>
+
+    <script>
+        // Load test samples on page load
+        window.onload = function () {
+            fetch('/get_test_samples')
+                .then(response => response.json())
+                .then(samples => {
+                    const select = document.getElementById('sample_select');
+                    samples.forEach((sample, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.text = `Sample ${index + 1}`;
+                        option.dataset.article = sample.article;
+                        option.dataset.summary = sample.summary;
+                        select.appendChild(option);
+                    });
+
+                    select.addEventListener('change', function () {
+                        const selected = select.options[select.selectedIndex];
+                        const article = selected.dataset.article || "";
+                        const summary = selected.dataset.summary || "";
+                        document.getElementById('article_text').value = article;
+                        document.getElementById('original-summary').textContent = summary;
+                    });
+                });
+        };
+
+        // Handle form submission
+        document.getElementById('summarization-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const articleText = document.getElementById('article_text').value;
+            document.getElementById('progress-container').style.display = 'block';
+
+            let progress = 0;
+            const progressInterval = setInterval(function () {
+                if (progress < 90) {
+                    progress += 10;
+                    document.getElementById('progress-bar').style.width = progress + '%';
+                }
+            }, 500);
+
+            fetch('/generate_summary', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `article_text=${encodeURIComponent(articleText)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                clearInterval(progressInterval);
+                document.getElementById('progress-container').style.display = 'none';
+
+                document.getElementById('arabart-summary').textContent = data.arabart_summary;
+            })
+            .catch(error => {
+                clearInterval(progressInterval);
+                document.getElementById('progress-container').style.display = 'none';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
