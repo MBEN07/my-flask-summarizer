@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Dynamically download the model if not present
 model_path = "fine_tuned_arabart"
 if not os.path.exists(model_path):
-    model_url = "https://your-google-drive-link/model.safetensors"  # Replace with your Google Drive link
+    model_url = "https://your-google-drive-link/model.safetensors"
     print("Downloading model file...")
     os.makedirs(model_path, exist_ok=True)
     response = requests.get(model_url)
