@@ -1,0 +1,4 @@
+__pycache__/
+.vscode/
+fine_tuned_arabart/
+*.pyc
