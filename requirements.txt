@@ -1,5 +1,7 @@
 flask==3.0.3
-transformers==4.46.1  # Latest stable version as of June 2025
+transformers==4.46.1
 torch==2.7.1
 gunicorn==22.0.0
 werkzeug==3.0.4
+pandas==2.2.2 
+requests==2.32.4
