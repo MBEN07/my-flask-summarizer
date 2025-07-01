@@ -6,9 +6,9 @@ import pandas as pd
 app = Flask(__name__)
 
 # -------- Load the fine-tuned AraBART model --------
-model_path = "/kaggle/input/finetuned_arabart_arasum_xlsum"  # adjust the folder name as needed
-model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
-tokenizer = AutoTokenizer.from_pretrained(model_path)
+arabart_model_name = "MBEN07/finetuned_arabart_arasum_xlsum"
+arabart_model = AutoModelForSeq2SeqLM.from_pretrained(arabart_model_name)
+arabart_tokenizer = AutoTokenizer.from_pretrained(arabart_model_name)
 
 # -------- Load the test dataset --------
 test_data_path = os.path.join("test", "test_subset.csv")
