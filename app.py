@@ -1,4 +1,5 @@
 import os
+import requests
 from flask import Flask, request, jsonify, render_template
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import requests
@@ -7,13 +8,13 @@ import pandas as pd
 app = Flask(__name__)
 
 # Dynamically download the model if not present
-model_path = "fine_tuned_arabart"
+model_path = "fine_tuned_arabart/model.safetensors"
 if not os.path.exists(model_path):
     model_url = "https://drive.google.com/file/d/1MGt6CApsgXOUojZNPlbMsEcvsl1dWk94/view?usp=drive_link"
     print("Downloading model file...")
-    os.makedirs(model_path, exist_ok=True)
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
     response = requests.get(model_url)
-    with open(os.path.join(model_path, "model.safetensors"), "wb") as f:
+    with open(model_path, "wb") as f:
         f.write(response.content)
 
 # Load the fine-tuned AraBART model
