@@ -1,1 +1,0 @@
-fine_tuned_arabart/model.safetensors filter=lfs diff=lfs merge=lfs -text
