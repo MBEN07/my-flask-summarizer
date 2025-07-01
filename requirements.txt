@@ -4,4 +4,3 @@ torch==2.7.1
 gunicorn==22.0.0
 werkzeug==3.0.4
 pandas
-requests==2.32.4
