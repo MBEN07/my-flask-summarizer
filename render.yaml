@@ -1,0 +1,17 @@
+# render.yaml
+services:
+  - type: web
+    name: my-flask-summarizer
+    env: python
+    build:
+      context: .
+      dockerfile: Dockerfile  # Optional: Use if you create a Dockerfile
+      env: python 3.12  # Specify Python 3.12
+    run:
+      command: gunicorn --bind 0.0.0.0:10000 app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12
+    startCommand:
+      - pip install --no-cache-dir -r requirements.txt
+      - gunicorn --bind 0.0.0.0:10000 app:app
