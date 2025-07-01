@@ -4,9 +4,6 @@ services:
     env: python
     build:
       context: .
-      env: python 3.12  # Force Python 3.12
+      dockerfile: Dockerfile  # Use custom Dockerfile
     run:
       command: gunicorn --bind 0.0.0.0:10000 app:app
-    startCommand:
-      - pip install --no-cache-dir -r requirements.txt
-      - gunicorn --bind 0.0.0.0:10000 app:app
