@@ -11,7 +11,7 @@ arabart_model = AutoModelForSeq2SeqLM.from_pretrained(arabart_model_name)
 arabart_tokenizer = AutoTokenizer.from_pretrained(arabart_model_name)
 
 # -------- Load the test dataset --------
-test_data_path = os.path.join("test", "test_subset.csv")
+test_data_path = os.path.join("Test", "test_subset.csv")
 test_df = pd.read_csv(test_data_path).dropna().reset_index(drop=True)
 
 # -------- Summary generation function --------
