@@ -6,7 +6,7 @@ import requests
 app = Flask(__name__)
 
 # Dynamically download the model if not present
-model_path = "fine_tuned_arabart/model.safetensors"
+model_path = "fine_tuned_arabart"
 try:
     if not os.path.exists(model_path):
         model_url = "https://drive.google.com/file/d/1MGt6CApsgXOUojZNPlbMsEcvsl1dWk94/view?usp=drive_link"
